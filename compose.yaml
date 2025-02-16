@@ -1,0 +1,29 @@
+services:
+    app:
+        build: .
+        container_name: app
+        ports:
+            - "3000:3000"
+        depends_on:
+            - db
+        environment:
+            DATABASE_URL: postgres://postgres:root@db:5432/booking
+        volumes:
+            - ./src:/app/src
+        restart: unless-stopped
+
+    db:
+        image: postgres:15
+        container_name: db
+        restart: always
+        environment:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: root
+            POSTGRES_DB: booking
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+volumes:
+    postgres_data:
